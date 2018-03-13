@@ -44,7 +44,12 @@ int main()
 
    	while(1)
    	{
-   		recvfrom(sockfd, str, sizeof(str), 0, (struct sockaddr*) &sock_client, &socklen);
+   		if (recvfrom(sockfd, str, sizeof(str), 0, (struct sockaddr*) &sock_client, &socklen) < 0)
+   		{
+   			perror("recvfrom");
+   			close(sockfd);
+   			exit(1);
+   		}
    		char flag = 1;
 
    		printf("%s\n", str);
@@ -53,9 +58,13 @@ int main()
    		else
    			printf("no\n");
    		memset(str, '\0', strlen(str));
-   		sendto(sockfd, str, sizeof(str), 0, (struct sockaddr*) &sock_client, socklen);
+   		if (sendto(sockfd, str, sizeof(str), 0, (struct sockaddr*) &sock_client, socklen) < 0)
+   		{
+   			perror("sendto");
+   			close(sockfd);
+   			exit(1);
+   		}
    	}
-	
     close(sockfd);
 	return 0;
 }

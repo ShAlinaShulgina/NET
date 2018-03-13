@@ -39,13 +39,18 @@ int main()
 		memset(str, '\0', strlen(str));
 		scanf("%s", str);
 		printf("%d\n", strlen(str));
-		if (sendto(sockfd, str, strlen(str), 0, (struct sockaddr* ) &sock_server, socklen))
+		if (sendto(sockfd, str, strlen(str), 0, (struct sockaddr* ) &sock_server, socklen) < 0)
 		{
 			perror("sendto");
     	    close(sockfd);
        		exit(1);
 		}
-		recvfrom(sockfd, str, strlen(str), 0, (struct sockaddr* ) &sock_server, &socklen);
+		if (recvfrom(sockfd, str, strlen(str), 0, (struct sockaddr* ) &sock_server, &socklen) < 0)
+		{
+			perror("recvfrom");
+			close(sockfd);
+			exit(1);
+		}
 
 		if (str[0] == 1)
 			printf("yes\n");
