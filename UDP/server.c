@@ -44,21 +44,22 @@ int main()
 
    	while(1)
    	{
-   		if (recvfrom(sockfd, str, sizeof(str), 0, (struct sockaddr*) &sock_client, &socklen) < 0)
+		if (recvfrom(sockfd, str, sizeof(str), 0, (struct sockaddr*) &sock_client, &socklen) < 0)
    		{
    			perror("recvfrom");
    			close(sockfd);
    			exit(1);
    		}
-   		char flag = 1;
 
    		printf("%s\n", str);
    		if (pal(str) == 1)
    			printf("yes\n");
    		else
    			printf("no\n");
-   		memset(str, '\0', strlen(str));
-   		if (sendto(sockfd, str, sizeof(str), 0, (struct sockaddr*) &sock_client, socklen) < 0)
+		str[0] = pal(str);
+		printf("%d\n", (int)str[0]);		
+	   	
+		if (sendto(sockfd, str, sizeof(str), 0, (struct sockaddr*) &sock_client, socklen) < 0)
    		{
    			perror("sendto");
    			close(sockfd);

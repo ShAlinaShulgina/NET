@@ -36,22 +36,22 @@ int main()
 	while(1)
 	{
 		printf("=====> String\n");
-		memset(str, '\0', strlen(str));
-		scanf("%s", str);
-		printf("%d\n", strlen(str));
-		if (sendto(sockfd, str, strlen(str), 0, (struct sockaddr* ) &sock_server, socklen) < 0)
+		fgets(str, 128, stdin);
+		str[strlen(str) - 1] = '\0';
+		if (sendto(sockfd, str, sizeof(str), 0, (struct sockaddr* ) &sock_server, socklen) < 0)
 		{
 			perror("sendto");
     	    close(sockfd);
        		exit(1);
 		}
-		if (recvfrom(sockfd, str, strlen(str), 0, (struct sockaddr* ) &sock_server, &socklen) < 0)
+		if (recvfrom(sockfd, str, sizeof(str), 0, (struct sockaddr* ) &sock_server, &socklen) < 0)
 		{
 			perror("recvfrom");
 			close(sockfd);
 			exit(1);
 		}
-
+		
+		printf("%d\n", (int)str[0]);
 		if (str[0] == 1)
 			printf("yes\n");
 		else
